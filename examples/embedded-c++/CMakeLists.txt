@@ -7,4 +7,6 @@ include_directories(../../src/include)
 link_directories(../../build/release/src)
 
 add_executable(example main.cpp)
+add_executable(upsert upsert.cpp)
 target_link_libraries(example duckdb)
+target_link_libraries(upsert duckdb)
