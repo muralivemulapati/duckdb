@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
   std::random_device rd; //
   // Seed a Mersenne Twister 32-bit pseudo-random number engine.
   std::mt19937 gen(rd());
-  std::uniform_int_distribution<int> dist_int1(1, 64);
+  std::uniform_int_distribution<int> dist_int1(64, 128);
   std::uniform_int_distribution<int> dist_int2(45, 64);
 
   auto randomStr = [&](uint8_t len) -> string {
@@ -64,7 +64,7 @@ int main(int argc, char* argv[]) {
   appender1.Close();
 
   auto start = std::chrono::steady_clock::now();
-  con.Query("INSERT INTO integers (k,v) SELECT k,v FROM inserts ON CONFLICT (k) DO UPDATE SET v = EXCLUDED.v");
+  con.Query("INSERT INTO key_values (k,v) SELECT k,v FROM inserts ON CONFLICT (k) DO UPDATE SET v = EXCLUDED.v");
   auto end = std::chrono::steady_clock::now();
 
   // Calculate the duration and cast it to nanoseconds
