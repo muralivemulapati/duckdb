@@ -34,9 +34,13 @@ int main(int argc, char* argv[]) {
   appender1.AppendRow(15, 59);
   appender1.AppendRow(5, 67);
   appender1.Close();
-  
+
   auto start = std::chrono::steady_clock::now();
-  con.Query("INSERT INTO integers (k,v) SELECT k,v FROM inserts ON CONFLICT (k) DO UPDATE SET v = EXCLUDED.v");
+  con.Query("PRAGMA explain_output = 'all';");
+  auto plan = con.Query(
+	  "EXPLAIN (FORMAT HTML) INSERT INTO integers (k,v) SELECT k,v FROM inserts ON CONFLICT (k) DO UPDATE SET v = EXCLUDED.v");
+  plan->Print();
+  //con.Query("INSERT INTO integers (k,v) SELECT k,v FROM inserts ON CONFLICT (k) DO UPDATE SET v = EXCLUDED.v");
   auto end = std::chrono::steady_clock::now();
 
   // Calculate the duration and cast it to nanoseconds
