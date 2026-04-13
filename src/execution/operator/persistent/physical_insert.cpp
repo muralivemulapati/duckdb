@@ -21,7 +21,7 @@
 #include "duckdb/storage/table/update_state.hpp"
 #include "duckdb/transaction/duck_transaction.hpp"
 #include "duckdb/transaction/local_storage.hpp"
-
+#include "duckdb/common/printer.hpp"
 namespace duckdb {
 
 PhysicalInsert::PhysicalInsert(PhysicalPlan &physical_plan, vector<LogicalType> types_p, TableCatalogEntry &table,
@@ -619,6 +619,8 @@ idx_t PhysicalInsert::OnConflictHandling(TableCatalogEntry &table, ExecutionCont
 
 SinkResultType PhysicalInsert::Sink(ExecutionContext &context, DataChunk &insert_chunk,
                                     OperatorSinkInput &input) const {
+	Printer::PrintF("Physical Insert Sink");
+        insert_chunk.Print();
 	auto &gstate = input.global_state.Cast<InsertGlobalState>();
 	auto &lstate = input.local_state.Cast<InsertLocalState>();
 
