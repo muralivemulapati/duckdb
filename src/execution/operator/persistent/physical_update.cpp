@@ -13,7 +13,7 @@
 #include "duckdb/storage/table/scan_state.hpp"
 #include "duckdb/storage/table/update_state.hpp"
 #include "duckdb/transaction/duck_transaction.hpp"
-
+#include "duckdb/common/printer.hpp"
 namespace duckdb {
 
 PhysicalUpdate::PhysicalUpdate(PhysicalPlan &physical_plan, vector<LogicalType> types, TableCatalogEntry &tableref,
@@ -105,6 +105,8 @@ public:
 };
 
 SinkResultType PhysicalUpdate::Sink(ExecutionContext &context, DataChunk &chunk, OperatorSinkInput &input) const {
+	Printer::PrintF(" physical_update:begin\n");
+        chunk.Print();
 	auto &g_state = input.global_state.Cast<UpdateGlobalState>();
 	auto &l_state = input.local_state.Cast<UpdateLocalState>();
 
@@ -204,6 +206,7 @@ SinkResultType PhysicalUpdate::Sink(ExecutionContext &context, DataChunk &chunk,
 	}
 
 	g_state.updated_count += chunk.size();
+        	Printer::PrintF(" physical_update:end\n");
 	return SinkResultType::NEED_MORE_INPUT;
 }
 

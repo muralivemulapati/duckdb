@@ -1,7 +1,7 @@
 #include "duckdb/execution/operator/persistent/physical_merge_into.hpp"
 #include "duckdb/execution/expression_executor.hpp"
 #include "duckdb/parser/statement/merge_into_statement.hpp"
-
+#include "duckdb/common/printer.hpp"
 namespace duckdb {
 
 PhysicalMergeInto::PhysicalMergeInto(PhysicalPlan &physical_plan, vector<LogicalType> types,
@@ -329,6 +329,8 @@ void PhysicalMergeInto::ComputeMatches(MergeIntoLocalState &local_state, DataChu
 }
 
 SinkResultType PhysicalMergeInto::Sink(ExecutionContext &context, DataChunk &chunk, OperatorSinkInput &input) const {
+	Printer::PrintF("physical_merge_into\n");
+        chunk.Print();
 	auto &global_state = input.global_state.Cast<MergeIntoGlobalState>();
 	auto &local_state = input.local_state.Cast<MergeIntoLocalState>();
 
